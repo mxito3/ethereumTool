@@ -1,0 +1,62 @@
+打开： 
+    aleth -m on -a 0xd3f2f38f50d67177d266ecb8db211390c4f56142
+启动rpc服务：
+
+    本地：
+    cd ~/github/gketh/scripts/dopple && python3 dopple.py /home/yapie/.ethereum/geth.ipc
+    服务器:
+        cd ~/github/scripts/dopple && python3 dopple.py /home/xhy/.ethereum/geth.ipc
+连接：
+    geth attach /home/yapie/.ethereum/geth.ipc
+
+区块浏览器：
+    cd /home/yapie/github/explorer && npm start
+
+
+common:
+    
+
+    eth.blockNumber
+
+    admin.nodeInfo.enode
+
+    admin.peers
+
+    admin.addPeer("enode://478260f34787bfe1e69ef21d0494cdd91310c207c7eea5886cc19e8df3421d9726c74d5e685f37dabf04156143efee172b9ac12add014c8bac841d0acd091f6c@152.0.0.116:30303")
+
+    eth.getBalance(eth.accounts[0])
+     
+    miner.setEtherbase(eth.accounts[0])
+    personal.unlockAccount(eth.coinbase,"123456",100000)
+
+    eth.lockAccount(eth.coinbase)
+
+公链：
+        节点1:
+            cd ~/github/gketh/private && rm -rf testData && aleth --db-path ./testData -t 1 --ipcpath ./testData
+            geth attach /home/yapie/github/gketh/private/testData/geth.ipc
+
+            　　
+
+        节点二：　
+                cd ~/github/gketh/private && aleth --db-path ./testData1 -t 1 --listen 9999 --ipcpath ./testData1
+             　  geth attach /home/yapie/github/gketh/private/testData1/geth.ipc
+                 
+打包上传:
+    peer1:
+    cd /home/yapie/github/gketh/build && cpack && scp aleth.tar.gz root@47.99.188.146:/home/xhy
+    peer2:
+     cd /home/yapie/github/gketh/build && scp aleth.tar.gz yapie@47.92.240.182:/home/yapie
+           
+服务器：
+    sudo rm -rf ./aleth && mkdir aleth && tar -xvf aleth.tar.gz -C ./aleth
+    rm -rf ./testData && aleth -m on -a 0xd3f2f38f50d67177d266ecb8db211390c4f56142 --db-path ./testData  --ipcpath ./testData
+
+
+
+test:
+     ./testeth -t '*/genesis_tests' && ./testeth -t 'BlockChainMainNetworkSuite/rescue' && ./testeth -t '*/basicDifficultyTest'
+
+控制挖矿脚本：
+    本地：
+        loadScript("/home/yapie/github/gketh/private/miner_control.js")
